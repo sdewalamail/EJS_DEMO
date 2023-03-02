@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <%- include('./partials/head') %>
+  </head>
+  <body>
+    
+
+     <!-- nav bar -->
+      <%- include('./partials/navbar') %>
+
+      <div class="container position-absolute top-50 start-50 translate-middle">
+        <div class="row  justify-content-center">
+       
+      <div>
+        <label for="formFileLg" class="form-label">Upload Profile Picture</label>
+        <input class="form-control form-control-lg" id="formFileLg" type="file" name ="image">
+      </div>
+             
+    </div>
+</div> 
+    
+    <footer><%- include('./partials/footer') %></footer>
+
+  </body>
+</html>

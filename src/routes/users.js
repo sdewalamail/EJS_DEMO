@@ -1,18 +1,21 @@
-const express = require('express');
-const Joi = require('joi');
+const express = require("express");
+const Joi = require("joi");
 const router = express.Router();
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
+const passport = require("passport");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs/promises");
 
-const bodyValidator = require('../middleware/validation')
-const tokenGenerator = require('../auth/tokenGenerator');
-const user = require('../model/user');
+const bodyValidator = require("../middleware/joiValidation");
+const tokenGenerator = require("../auth/tokenGenerator");
+const user = require("../model/user");
+// const {authenticate} = require("../middleware/passport");
+const authenticate = passport.authenticate("jwt", { session: false });
 
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs/promises')
+const { logIn, signup, uploadProfilePicture } = require("../controller/user");
 
-const uploadPath = path.join(process.cwd(), "src" , "public", "images" , "profile_pic" );
-
+// check file extension (MULTER)
 function fileFilter(req, file, callback) {
   try {
     const acceptedExtension = [".jpg", ".png", ".gif", ".webp", ".bmp"];
@@ -22,18 +25,29 @@ function fileFilter(req, file, callback) {
   } catch (error) {
     callback(error);
   }
-}; 
+}
 
- const storage = multer.diskStorage({
-    destination:function(req, file, callback) {
+//   After chek the extension provied  uploadPath through disStorage (multer)
+
+const uploadPath = path.join(
+  process.cwd(),
+  "src",
+  "public",
+  "images",
+  "profile_pic"
+);
+
+const storage = multer.diskStorage({
+  destination: function (req, file, callback) {
     callback(null, uploadPath);
   },
-  filename: function(req, file, callback) {
+  filename: function (req, file, callback) {
     callback(null, Date.now() + path.extname(file.originalname));
   },
- });
+});
 
- const uploads = multer({
+//  all thing good now upload the picture
+const uploads = multer({
   storage: storage,
   limits: {
     fieldSize: 2 * 1024 * 1024,
@@ -41,107 +55,82 @@ function fileFilter(req, file, callback) {
   fileFilter: fileFilter,
 });
 
-
-
-
-/* GET users listing. */
-
-
-
-  const schema = Joi.object({
-
-    "name": Joi.string().min(3).email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-    "password": Joi.string().required() .pattern(/^(?=.*[A-Za-z])(?=.*[\d])(?=.*[@#$])[\w@#$]{4,}$/)
-  })
-
-
-
-router.post('/', async(req, res) => {
-    const users = await user.findOne({userName:req.body.name})
-          // console.log("heoo");
-       res.send(users)
-      
-})
-
-
-router.post('/login', bodyValidator(schema) ,tokenGenerator ,(req, res, next) =>  {
-   
-          res.send({Token:`Bearer ${req.token}`});   
-          //  res.render("index");
-          //  res.json({"login":  "Successfully"})
-    
+const loginSchema = Joi.object({
+  email: Joi.string()
+    .required()
+    .pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
+  password: Joi.string()
+    .required()
+    .pattern(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    ),
 });
 
-router.post('/signup', bodyValidator(schema), async (req, res, next) => {
+const signupSchema = Joi.object({
+  firstName: Joi.string().min(3),
+  lastName: Joi.string().min(3),
+  email: Joi.string()
+    .required()
+    .pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
+  phoneNumber: Joi.string()
+    .required()
+    .min(10)
+    .pattern(/^[5-9]\d{9}$/),
+  designation: Joi.string().required(),
+  countryCode: Joi.string().required(),
+  password: Joi.string()
+    .required()
+    .pattern(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    ),
+  repeat_password: Joi.ref("password"),
+});
 
+//  Get Method
+router.get("/login", (req, res, next) => {
+   console.log("login");
+  try {
+    res.render("login",{message:{}, state:{}})    
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-    const hashedPassword =  await bcrypt.hash(req.body.password,4)
-      
-     await user.create({
-      userName: req.body.name, userPassword: hashedPassword })
-      res.send({message: "userCreated" })
-   });
+router.get("/", authenticate, async (req, res) => {
+  res.render("index");
+});
 
-   router.post('/uploadDP/:name', uploads.single("profilePic") , async (req, res, next) => {
-    try {
-      
-    
-      const userName = req.params.name;
+router.get("/signup", async (req, res, next) => {
   
-      // check extension
-  
-      if (!req.file) {
-        return res.status(400).json({
-          description:
-            "please give an appropriate image formate.eg ['.jpg','.png', '.gif', '.webp', '.bmp']",
-        });
-      }
-  
-      // Find the item to upload
+  try {
+    res.render("signup",{message:{}, state:{}})    
 
-      const validUser = await user.findOne({userName: userName});
-      console.log(validUser);
-  
-      // if given user doesn't exists the rm remove the uploaded image
+  } catch (error) {
 
-      
-      if (validUser == null ) {
-        await fs.rm( path.join (`${uploadPath}` , req.file.filename) );
-        return res.status(404).json({ description: "User not found" });
-      }
-  
-      // console.log();
-
-
-
-      // if user have already set the profilePic then remove the previous and upload the new pic logic
-  
-      try {
-        if (validUser.profilePic ) {
-         let test =  await fs.rm(path.join(process.cwd(),"src", `${validUser.profilePic}`));
-        }
-      } catch (error) {
-        console.log(error);
-        if (!(error.code === "ENOENT")) {
-          throw error;
-        }
-      }
-  
-      const updatedUser  = await user.findOneAndUpdate({userName},{$set:{profilePic: path.join("public","images", "profile_pic", req.file.filename)}})
-      
-       await updatedUser.save();
-       res.json(updatedUser);
-      //  console.log("Old user>>>>>>>>>>>> ", updatedUser);
-      
-    } catch (error) {
       console.log(error);
-      res.status(500).send("Server error");
-    }
+  }
 
-        
-  })
+});
 
+router.get("/upload", async (req, res, next) => {
+  res.render("imageUpload");
+});
+
+// router.get('*', async (req, res, next) => { res.render("error")});
+
+//  post Method
+
+router.post("/login", bodyValidator(loginSchema), tokenGenerator, logIn);
+
+router.post("/signup", bodyValidator(signupSchema), signup);
+
+router.post(
+  "/uploadDP/:name",
+  authenticate,
+  uploads.single("profilePic"),
+  uploadProfilePicture
+);
 
 module.exports = router;
-
-

@@ -1,0 +1,278 @@
+/* Global styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: sans-serif;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Header styles */
+  
+  header {
+    background-color: #262626;
+    color: #fff;
+    padding: 20px 0;
+  }
+  
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo a {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .menu ul {
+    display: flex;
+    list-style: none;
+  }
+  
+  .menu ul li {
+    margin-left: 20px;
+  }
+  
+  .menu ul li a {
+    color: #F0F2F5;
+    text-decoration: none;
+  }
+  
+  /* Hero section styles */
+  
+  .hero {
+    background-image: url('https://source.unsplash.com/1600x900/?beach');
+    background-size: cover;
+    background-position: center;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .hero h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+  }
+  
+  .hero h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: normal;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #262626;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #fff;
+    color: #262626;
+  }
+  
+  /* About section styles */
+  
+  .about {
+    padding: 80px 0;
+  }
+  
+  .about h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+  }
+  
+  .about p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  
+  .about ul {
+    list-style: none;
+  }
+  
+  .about ul li {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  /* Portfolio section styles */
+  
+  .portfolio {
+    padding: 80px 0;
+  }
+  
+  .portfolio h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+  }
+  
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 30px;
+  }
+  
+  .item {
+    position: relative;
+  }
+  
+  .item img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+  }
+  
+  .overlay h3,
+  .overlay p {
+    color: #fff;
+    text-align: center;
+  }
+  
+  .item:hover .overlay {
+    opacity: 1;
+  }
+  
+  .item:hover img {
+    opacity: 0.5;
+  }
+  
+  /* Contact section styles */
+
+.contact {
+    padding: 80px 0;
+    }
+    
+    .contact h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+    }
+    
+    .form {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 0 auto;
+    }
+    
+    .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    }
+    
+    .form-group label {
+    font-size: 18px;
+    margin-bottom: 10px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    }
+    
+    .form-group textarea {
+    height: 150px;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+    outline: none;
+    border-color: #262626;
+    }
+    
+    .btn-submit {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #262626;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    margin-top: 20px;
+    }
+    
+    .btn-submit:hover {
+    background-color: #fff;
+    color: #262626;
+    }
+    
+    /* Footer styles */
+    
+    footer {
+    background-color: #262626;
+    color: #fff;
+    padding: 20px 0;
+    margin-top: 80px;
+    }
+    
+    .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    }
+    
+    .footer-logo a {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    }
+    
+    .social-links ul {
+    display: flex;
+    list-style: none;
+    }
+    
+    .social-links ul li {
+    margin-right: 20px;
+    }
+    
+    .social-links ul li a {
+    color: #fff;
+    text-decoration: none;
+    }
+    
+    .footer-bottom {
+    font-size: 14px;
+    text-align: center;
+    }

@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
+const user = require('./users')
+
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('login');
-});
+router.use('/', user);
 
 // router.get('/users', require('./users'));  
 
