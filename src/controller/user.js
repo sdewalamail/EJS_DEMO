@@ -11,7 +11,8 @@
                 res.render("login",{message:{error:validationError?.message},state:req.body}); 
              }else{
 
-                 res.json({ Token:`Bearer ${req.token}`, "login":  "Successfully"});
+                 res.cookie( "token",`Bearer ${req.token}`, { magAge: 1000*60*60, httpOnly:true,});
+                 return res.redirect('/')
                  
              }
 

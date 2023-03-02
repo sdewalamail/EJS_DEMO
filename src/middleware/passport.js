@@ -2,28 +2,29 @@
 const passport = require('passport');
 const passportJWT = require('passport-jwt');
 const JwtStrategy = passportJWT.Strategy;
-const ExtractJwt = passportJWT.ExtractJwt;
+// const ExtractJwt = passportJWT.ExtractJwt;
 const bcrypt = require('bcrypt');
 
 const User = require('../model/user');
 
 const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: extractor,
   secretOrKey: process.env.SECRET_KEY,
 };
 
 const jwtStrategy = new JwtStrategy(jwtOptions, async (payload, done) => {
   try {
 
-    // console.log(payload);
-
-    const user = await User.findOne({email:payload.email}).lean();
+    
+    const user = await User.findOne({email:payload.userName}).lean();
+    console.log(payload, user);
     if (!user) {
-
+      
       return done(null, false);
     }
      
-      const isvalidPassword =  bcrypt.compareSync(payload.password, user.password);
+      const isvalidPassword = payload.userPassword === user.password;
 
         console.log(isvalidPassword);
 
@@ -36,6 +37,19 @@ const jwtStrategy = new JwtStrategy(jwtOptions, async (payload, done) => {
     return done(error, false);
   }
 });
+
+// custom cookie extractor _____________________>>>>>>>>>>>>>>>>>>
+
+function extractor (req){
+
+      let token = null;
+      if(req && req.cookies){
+        token = req.cookies['token']?.slice(7);
+        console.log(req.cookies['token']?.slice(7));
+      }  
+      return token;
+}
+
 
 // passport.use(jwtStrategy);
 
