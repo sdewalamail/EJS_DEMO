@@ -18,7 +18,7 @@ const jwtStrategy = new JwtStrategy(jwtOptions, async (payload, done) => {
 
     
     const user = await User.findOne({email:payload.userName}).lean();
-    console.log(payload, user);
+    // console.log(payload, user);
     if (!user) {
       
       return done(null, false);
@@ -26,14 +26,14 @@ const jwtStrategy = new JwtStrategy(jwtOptions, async (payload, done) => {
      
       const isvalidPassword = payload.userPassword === user.password;
 
-        console.log(isvalidPassword);
+        // console.log(isvalidPassword);
 
       if(isvalidPassword) return done(null, user);
 
       else return done(null, false);
 
   } catch (error) {
-     console.log(error)
+    //  console.log(error)
     return done(error, false);
   }
 });
@@ -45,7 +45,7 @@ function extractor (req){
       let token = null;
       if(req && req.cookies){
         token = req.cookies['token']?.slice(7);
-        console.log(req.cookies['token']?.slice(7));
+        // console.log(req.cookies['token']?.slice(7));
       }  
       return token;
 }

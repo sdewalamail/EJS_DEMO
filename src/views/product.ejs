@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product</title>
+
+    <%- include('./partials/head') %>
+
+</head>
+<body>
+    <%- include('./partials/navbar') %>
+
+    <!-- <% function convertDateFormat(date) {
+      const newDate = new Date(date);
+      const month = newDate.getMonth() + 1;
+      const day = newDate.getDate();
+      const year = newDate.getFullYear();
+      return `${month}/${day}/${year}`;
+  } %> -->
+
+
+    <div class="container mt-5 border">
+
+    <table class="table">
+
+        <thead class="thead-dark">
+          <tr>
+            
+            <th scope="col">Product Name</th>
+            <th scope="col">Product Description</th>
+            <th scope="col">Product Quantity</th>
+            <th scope="col">Order Id</th>
+            <th scope="col">Order Date</th>
+            <th scope="col">Action</th>
+            <!-- <th scope="col">Order Date</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let product of data){ %>
+            <tr>
+              <!-- <th scope="row">1</th> -->
+              <td> <%= product.productName %> </td>
+              <td><%= product.productDiscription%> </td>
+              <td><%= product.quantity %> </td>
+              <td><%= product.OrderId %> </td>
+              <td> <%= product.orederDate %> </td>
+              <td> <a href="/deleteProduct/<%=product._id%>"> <i class="bi bi-trash3"></i> </a> </td>
+                
+            </tr>
+
+          <% } %>
+    
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="container mt-5 position-absolute top-50 start-50 translate-middle">
+
+ <form class="form-horizontal" method="post" action="/product">
+
+    <fieldset>    
+    
+    <!-- Text input-->
+    <div class="form-group m-2" >
+      <label class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>  
+      <div class="col-md-4">
+      <input id="product_name" name="productName" placeholder="PRODUCT NAME" class="form-control input-md" required="" type="text">
+        
+      </div>
+    </div>
+    
+    <!-- Text input-->
+    <div class="form-group m-2">
+      <label class="col-md-4 control-label" for="productDescription">PRODUCT DESCRIPTION </label>  
+      <div class="col-md-4">
+      <input id="product_name_fr" name="productDescription" placeholder="PRODUCT DESCRIPTION" class="form-control input-md" required="" type="text">
+        
+      </div>
+    </div>
+
+    <div class="form-group m-2">
+      <label class="col-md-4 control-label" for="filebutton">Product Quantity</label>
+      <div class="col-md-4">
+        <input id="filebutton" name="quantity" class="input-file" type="number">
+      </div>
+    </div>
+    
+   
+    <!-- File Button --> 
+    <div class="form-group m-2">
+      <label class="col-md-4 control-label" for="filebutton">Product Image</label>
+      <div class="col-md-4">
+        <input id="filebutton" name="image" class="input-file" type="file">
+      </div>
+    </div>
+
+ 
+     
+    <!-- Button -->
+    <div class="form-group m-2">
+      <!-- <label class="col-md-4 control-label" for="singlebutton">Single Button</label>    -->
+      <div class="col-md-4">
+        <button id="singlebutton" name="singlebutton" class="btn btn-primary">Button</button>
+      </div>
+      </div>
+    
+    </fieldset>
+    </form>
+
+    <% if(message && message.success) { %>
+
+        <div class="alert alert-success" role="alert">
+            <%= message?.success %>
+        </div>
+
+        <% } %>  
+</div> 
+
+
+ <footer><%- include('./partials/footer') %></footer>
+</body>
+</html>

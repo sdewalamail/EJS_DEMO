@@ -39,7 +39,7 @@
       
                });
 
-               res.json({user: "Successfully created"});
+               res.render("signup",{message:{success: "successfully Singedup"},state:{}}); 
 
          }
         

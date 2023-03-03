@@ -54,13 +54,15 @@
   /* Hero section styles */
   
   .hero {
-    background-image: url('https://source.unsplash.com/1600x900/?beach');
+    background-image: url('https://user-images.githubusercontent.com/125871663/222636848-0aef7f5e-5dd7-48a5-826b-c54be8524fd5.png');
     background-size: cover;
     background-position: center;
     height: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
+    
+  
   }
   
   .hero h1 {

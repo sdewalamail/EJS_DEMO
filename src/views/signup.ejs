@@ -99,6 +99,14 @@
 
 		<% } %>  
 
+		<% if(message && message.success) { %>
+
+			<div class="alert alert-success" role="alert">
+				<%= message?.success %>
+			</div>
+	
+			<% } %>  
+
     <div class="form-group">
         <button type="submit" class="btn btn-outline-success btn-block" > Create Account  </button>
     </div> <!-- form-group// -->      

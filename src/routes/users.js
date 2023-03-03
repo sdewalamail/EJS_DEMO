@@ -11,9 +11,12 @@ const bodyValidator = require("../middleware/joiValidation");
 const tokenGenerator = require("../auth/tokenGenerator");
 const user = require("../model/user");
 // const {authenticate} = require("../middleware/passport");
-const authenticate = passport.authenticate("jwt", { session: false });
+const authenticate = require('../middleware/requireLogin')
 
 const { logIn, signup, uploadProfilePicture } = require("../controller/user");
+const { render } = require("../app");
+
+const product = require('../model/productSchema')
 
 // check file extension (MULTER)
 function fileFilter(req, file, callback) {
@@ -90,17 +93,21 @@ const signupSchema = Joi.object({
 
 //  Get Method
 router.get("/login", (req, res, next) => {
-   console.log("login");
-  try {
+  if(req.query['authError']){
+
+    return res.render('login',{message: {"authError": req.query['authError']}, state:{} } );
+ }
+
     res.render("login",{message:{}, state:{}})    
-  } catch (error) {
-    console.log(error);
-  }
+ 
 });
 
 router.get("/", authenticate, async (req, res) => {
+
+  
   res.render("index");
 });
+
 
 router.get("/signup", async (req, res, next) => {
   
@@ -113,6 +120,39 @@ router.get("/signup", async (req, res, next) => {
   }
 
 });
+
+
+      //  Product route
+
+    router.get('/product', authenticate ,async(req, res, next) =>  {
+         const products =  await product.find({}).lean();
+        //  console.log(products);
+         res.render('product', {message:{}, state:{},data:Array.from(products)})
+
+      });
+
+      router.post('/product', authenticate ,async(req, res, next) =>  {
+        
+         const data = product.create({
+
+          "productName": req.body.productName ,
+          "productDiscription": req.body.productDescription,
+          "quantity": req.body.quantity,
+          
+
+         });
+         
+         res.redirect('product')
+
+    });
+
+     router.get("/deleteProduct/:id", async (req, res) => {
+        const {id}= req.params;
+          await product.deleteOne({_id:id});
+          res.redirect("/product");
+          
+     })
+
 
 router.get("/upload", async (req, res, next) => {
   res.render("imageUpload");
