@@ -21,13 +21,13 @@
   } %> -->
 
 
-    <div class="container mt-5 border">
+    <div class="container card mt-5 border">
 
     <table class="table">
 
         <thead class="thead-dark">
           <tr>
-            
+            <th scope="col"></th>
             <th scope="col">Product Name</th>
             <th scope="col">Product Description</th>
             <th scope="col">Product Quantity</th>
@@ -39,8 +39,8 @@
         </thead>
         <tbody>
           <% for(let product of data){ %>
-            <tr>
-              <!-- <th scope="row">1</th> -->
+            <tr class="showProduct">
+              <th scope="row"><img src="<%= product.productImage %>" class="rounded-4" alt="..." style="max-height: 40px;"></th>
               <td> <%= product.productName %> </td>
               <td><%= product.productDiscription%> </td>
               <td><%= product.quantity %> </td>
@@ -58,69 +58,122 @@
 
 
 
-<div class="container mt-5 position-absolute top-50 start-50 translate-middle">
+<div class="container mt-5 card p-5">
 
- <form class="form-horizontal" method="post" action="/product">
+  <div class="row">
+    <div class="col-md-6">
+        <!-- Form start -->
+ <form class="form-horizontal" method="post" action="/product" enctype="multipart/form-data">
 
-    <fieldset>    
-    
-    <!-- Text input-->
-    <div class="form-group m-2" >
-      <label class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>  
-      <div class="col-md-4">
-      <input id="product_name" name="productName" placeholder="PRODUCT NAME" class="form-control input-md" required="" type="text">
-        
-      </div>
+  <fieldset>    
+  
+  <!-- Text input-->
+  <div class="form-group m-2" >
+    <label class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>  
+    <div class="col-md-4">
+    <input id="product_name" name="productName" placeholder="PRODUCT NAME" class="form-control input-md" required="" type="text">
+      
     </div>
-    
-    <!-- Text input-->
-    <div class="form-group m-2">
-      <label class="col-md-4 control-label" for="productDescription">PRODUCT DESCRIPTION </label>  
-      <div class="col-md-4">
-      <input id="product_name_fr" name="productDescription" placeholder="PRODUCT DESCRIPTION" class="form-control input-md" required="" type="text">
-        
-      </div>
+  </div>
+  
+  <!-- Text input-->
+  <div class="form-group m-2">
+    <label class="col-md-4 control-label" for="productDescription">PRODUCT DESCRIPTION </label>  
+    <div class="col-md-4">
+    <input id="product_name_fr" name="productDescription" placeholder="PRODUCT DESCRIPTION" class="form-control input-md" required="" type="text">
+      
     </div>
+  </div>
 
-    <div class="form-group m-2">
-      <label class="col-md-4 control-label" for="filebutton">Product Quantity</label>
-      <div class="col-md-4">
-        <input id="filebutton" name="quantity" class="input-file" type="number">
-      </div>
+  <div class="form-group m-2">
+    <label class="col-md-4 control-label" for="filebutton">Product Quantity</label>
+    <div class="col-md-4">
+      <input id="filebutton" name="quantity" class="input-file" type="number">
     </div>
-    
-   
-    <!-- File Button --> 
-    <div class="form-group m-2">
-      <label class="col-md-4 control-label" for="filebutton">Product Image</label>
-      <div class="col-md-4">
-        <input id="filebutton" name="image" class="input-file" type="file">
-      </div>
-    </div>
-
+  </div>
+  
  
-     
-    <!-- Button -->
-    <div class="form-group m-2">
-      <!-- <label class="col-md-4 control-label" for="singlebutton">Single Button</label>    -->
-      <div class="col-md-4">
-        <button id="singlebutton" name="singlebutton" class="btn btn-primary">Button</button>
-      </div>
-      </div>
-    
-    </fieldset>
-    </form>
+  <!-- File Button --> 
+  <div class="form-group m-2">
+    <label class="col-md-4 control-label" for="filebutton">Product Image</label>
+    <div class="col-md-4">
+      <input id="filebutton" name="productImage" class="input-file" type="file">
+    </div>
+  </div>
 
-    <% if(message && message.success) { %>
 
-        <div class="alert alert-success" role="alert">
-            <%= message?.success %>
-        </div>
+   
+  <!-- Button -->
+  <div class="form-group m-2">
+    <!-- <label class="col-md-4 control-label" for="singlebutton">Single Button</label>    -->
+    <div class="col-md-4">
+      <button id="singlebutton" name="singlebutton" class="btn btn-primary">Button</button>
+    </div>
+    </div>
+  
+  </fieldset>
+</form>
 
-        <% } %>  
+<% if(message && message.success) { %>
+
+  <div class="alert alert-success" role="alert">
+      <%= message?.success %>
+  </div>
+
+  <% } %>  
+
+
+<% if(message && message.deleteMessage) { %>
+
+<div class="alert alert-danger" role="alert">
+    <%= message?.deleteMessage %>
+</div>
+
+<% } %> 
+<!-- form end -->
+    </div>
+    <div class="col-md-6">
+      <!-- picture show box -->
+
+        <img src="" alt="" id="productImage" style="max-width: 600px; "/>
+
+      <!-- picture show boxend -->
+    </div>
+
+  </div>
+
+
+
+
+ <!-- end -->
+
+
 </div> 
 
 
  <footer><%- include('./partials/footer') %></footer>
+<script>
+  const productImage = document.getElementById('productImage');
+
+  document.querySelectorAll(".showProduct").forEach (el=> {
+
+    el.querySelectorAll('img').forEach(img => {
+
+       img.addEventListener('mouseover', (t) =>{
+        productImage.src = t.target.src;     
+        console.log(t.target.src);   
+
+       });
+
+       img.addEventListener('mouseout', (t) =>{
+        productImage.src = undefined;     
+        console.log(t.target.src);
+         
+    });
+
+  });  
+});
+</script>
+
 </body>
 </html>

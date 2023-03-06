@@ -126,30 +126,33 @@ router.get("/signup", async (req, res, next) => {
 
     router.get('/product', authenticate ,async(req, res, next) =>  {
          const products =  await product.find({}).lean();
+         const {message,deleteMessage} =req.query
+
         //  console.log(products);
-         res.render('product', {message:{}, state:{},data:Array.from(products)})
+         res.render('product', {message:{success:message, deleteMessage  }, state:{},data:Array.from(products)})
 
       });
 
-      router.post('/product', authenticate ,async(req, res, next) =>  {
+      router.post('/product', authenticate ,uploads.single("productImage"),async(req, res, next) =>  {
         
          const data = product.create({
 
           "productName": req.body.productName ,
           "productDiscription": req.body.productDescription,
           "quantity": req.body.quantity,
+          "productImage": path.join("public", "images", "profile_pic", req.file?.filename || " ").toString()
           
 
          });
          
-         res.redirect('product')
+         res.redirect(`product?message=Product Added Successfully`)
 
     });
 
      router.get("/deleteProduct/:id", async (req, res) => {
         const {id}= req.params;
           await product.deleteOne({_id:id});
-          res.redirect("/product");
+          res.redirect("/product?deleteMessage=Product Deleted Successfully");
           
      })
 

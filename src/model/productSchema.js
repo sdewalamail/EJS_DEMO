@@ -9,7 +9,6 @@ const mongoose = require('mongoose');
     "productName": String,
       "OrderId": {
         type: String,
-        unique: true,
         default:generateOrderId()
       },
       "productDiscription": String,
@@ -17,7 +16,8 @@ const mongoose = require('mongoose');
          type: Date,
          default: Date.now()
      },
-     "quantity":Number
+     "quantity":Number,
+     "productImage": String
   
   },)
 
