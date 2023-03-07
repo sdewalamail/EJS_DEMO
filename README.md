@@ -1,1 +1,1 @@
-# fullTrainingDemo
+# EJS Demo
